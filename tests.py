@@ -21,8 +21,6 @@ class TestChainMap(unittest.TestCase):
             pass
 
 
-
-
 class TestMapsAttribute(unittest.TestCase):
     def test_slice(self):
         c = chainmap.ChainMap({"a": 1}, {"a": 2, "b": 3})
@@ -108,5 +106,19 @@ class TestCastToList(unittest.TestCase):
         self.assertTrue("b" in cm)
 
 
+class TestLength(unittest.TestCase):
+    def test_empty(self):
+        cm = chainmap.ChainMap()
+
+        self.assertEquals(0, len(cm))
+
+    def test_filled(self):
+        cm = chainmap.ChainMap({"a": 1}, {"a": 2, "b": 3})
+
+        self.assertEquals(2, len(cm))
+
+
+
 if __name__ == '__main__':
     unittest.main()
+

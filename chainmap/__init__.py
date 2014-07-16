@@ -28,8 +28,17 @@ class ChainMap(dict):
 
     def __iter__(self):
         """lazy implementation would have been better"""
+        _keys = self._all_keys()
+        return iter(_keys)
+
+    def _all_keys(self):
         _keys = []
         for m in self.maps:
             _keys.extend(m.keys())
-        _keys = list(set(_keys))
-        return iter(_keys)
+        return list(set(_keys))
+
+
+    def __len__(self):
+        return len(self._all_keys())
+
+
