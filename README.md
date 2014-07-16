@@ -19,12 +19,10 @@ Target interface:
 https://docs.python.org/3/library/collections.html#chainmap-objects
 
 
-To execute tests
+Execute tests
 ----------------
+in root dir:
 
- - first install virtualenv with 
-$ make virtualenv
- - then run test with
 $ make check
 
 

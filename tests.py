@@ -79,7 +79,11 @@ class TestDeleteItem(unittest.TestCase):
 
     def test_does_not_exist(self):
         cm = chainmap.ChainMap()
-        # XXX
+        try:
+            del cm["a"]
+            self.fail("Deleting an non-existant attribute is not possible.")
+        except KeyError:
+            pass
 
 
 class TestInOperator(unittest.TestCase):
@@ -103,3 +107,6 @@ class TestCastToList(unittest.TestCase):
         self.assertEquals(set(["a", "b", "c"]), set(l)) #ordre important?
         self.assertTrue("b" in cm)
 
+
+if __name__ == '__main__':
+    unittest.main()
