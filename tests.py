@@ -118,6 +118,17 @@ class TestLength(unittest.TestCase):
         self.assertEquals(2, len(cm))
 
 
+class TestCastToBool(unittest.TestCase):
+    def test_empty(self):
+        cm = chainmap.ChainMap()
+
+        self.assertFalse(bool(cm))
+
+    def test_filled(self):
+        cm = chainmap.ChainMap({"a": 1})
+
+        self.assertTrue(bool(cm))
+
 
 if __name__ == '__main__':
     unittest.main()

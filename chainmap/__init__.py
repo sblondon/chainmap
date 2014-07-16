@@ -37,8 +37,10 @@ class ChainMap(dict):
             _keys.extend(m.keys())
         return list(set(_keys))
 
-
     def __len__(self):
         return len(self._all_keys())
+
+    def __nonzero__(self):
+        return any(self.maps)
 
 
