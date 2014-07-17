@@ -1,4 +1,6 @@
-class ChainMap(dict):
+import collections
+
+class ChainMap(collections.MutableMapping):
     def __init__(self, *maps):
         if maps:
             self.maps = maps

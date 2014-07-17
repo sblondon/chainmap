@@ -169,6 +169,15 @@ class TestItems(unittest.TestCase):
             self.assertFalse((k == "d" and v == 34))
 
 
+class TestCastToDict(unittest.TestCase):
+    def test(self):
+        cm = chainmap.ChainMap({'d': 567, 'a': 'e'}, {'d': 34}, {'f': 45})
+
+        d = dict(cm)
+
+        self.assertEqual({'d': 567, 'f': 45, 'a': 'e'}, d)
+
+
 if __name__ == '__main__':
     unittest.main()
 
