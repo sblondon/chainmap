@@ -39,6 +39,25 @@ class TestNewChild(unittest.TestCase):
         self.assertEqual({"brian": "wanda"}, cm_copy.maps[1])
         self.assertNotEquals(id(cm), id(cm_copy))
 
+
+class TestParents(unittest.TestCase):
+    def test_empty(self):
+        cm = chainmap.ChainMap()
+
+        cm_parent = cm.parents
+
+        self.assertEqual([{}], cm_parent.maps)
+        self.assertNotEquals(id(cm), id(cm_parent))
+
+    def test_with_param(self):
+        cm = chainmap.ChainMap({'brian': "wanda"}, {"spam": "SPAM"}, {'holy': "graal"})
+
+        cm_parent = cm.parents
+
+        self.assertEqual(({"spam": "SPAM"}, {'holy': "graal"}), cm_parent.maps)
+        self.assertNotEquals(id(cm), id(cm_parent))
+
+
 class TestMapsAttribute(unittest.TestCase):
     def test_slice(self):
         c = chainmap.ChainMap({"a": 1}, {"a": 2, "b": 3})

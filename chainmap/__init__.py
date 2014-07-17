@@ -10,6 +10,10 @@ class ChainMap(dict):
         return ChainMap(_start_dict, *self.maps)
 
 
+    @property
+    def parents(self):
+        return ChainMap(*self.maps[1:])
+
     def __getitem__(self, key):
         for mapping in self.maps:
             try:
