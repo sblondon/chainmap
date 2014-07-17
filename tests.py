@@ -23,13 +23,13 @@ class TestInit(unittest.TestCase):
 
 class TestMapsAttribute(unittest.TestCase):
     def test_slice(self):
-        c = chainmap.ChainMap({"a": 1}, {"a": 2, "b": 3})
+        cm = chainmap.ChainMap({"a": 1}, {"a": 2, "b": 3})
 
-        self.assertEqual({'a': 1}, c.maps[0])
-        self.assertEqual({'a': 2, 'b': 3}, c.maps[1])
-        self.assertEqual({'a': 2, 'b': 3}, c.maps[-1])
+        self.assertEqual({'a': 1}, cm.maps[0])
+        self.assertEqual({'a': 2, 'b': 3}, cm.maps[1])
+        self.assertEqual({'a': 2, 'b': 3}, cm.maps[-1])
         try:
-            c.maps[2]
+            cm.maps[2]
             self.fail("Index invalid")
         except IndexError:
             pass
@@ -164,6 +164,18 @@ class TestCastToBool(unittest.TestCase):
         cm = chainmap.ChainMap({"a": 1})
 
         self.assertTrue(bool(cm))
+
+class TestItems(unittest.TestCase):
+    def test(self):
+        cm = chainmap.ChainMap({'d': 567, 'a': 'e'}, {'d': 34}, {'f': 45})
+
+        for k, v in cm.items():
+            self.assertTrue(
+                    (k == "d" and v == 567) or \
+                    (k == "a" and v == 'e') or \
+                    (k == "f" and v == 45)
+                    )
+            self.assertFalse((k == "d" and v == 34))
 
 
 if __name__ == '__main__':

@@ -55,5 +55,6 @@ class ChainMap(dict):
     def __nonzero__(self):
         return any(self.maps)
 
-
+    def items(self):
+        return [(key, self[key]) for key in self._all_keys()]
 
