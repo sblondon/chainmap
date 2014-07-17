@@ -11,6 +11,9 @@ class ChainMap(dict):
                 return mapping[key]
             except KeyError:
                 pass
+        self.__missing__(key)
+
+    def __missing__(self, key):
         raise KeyError(key)
 
     def __setitem__(self, key, value):
