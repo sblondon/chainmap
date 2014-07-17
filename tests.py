@@ -2,7 +2,7 @@ import unittest
 
 import chainmap
 
-class TestChainMap(unittest.TestCase):
+class TestInit(unittest.TestCase):
     def test_accept_n_dicts(self):
         chainmap.ChainMap()
         chainmap.ChainMap({})
@@ -20,6 +20,24 @@ class TestChainMap(unittest.TestCase):
         except KeyError:
             pass
 
+class TestNewChild(unittest.TestCase):
+    def test_no_param(self):
+        cm = chainmap.ChainMap({'brian': "wanda"})
+
+        cm_copy = cm.new_child()
+
+        self.assertEqual({}, cm_copy.maps[0])
+        self.assertEqual({"brian": "wanda"}, cm_copy.maps[1])
+        self.assertNotEquals(id(cm), id(cm_copy))
+
+    def test_with_param(self):
+        cm = chainmap.ChainMap({'brian': "wanda"})
+
+        cm_copy = cm.new_child({"spam": "SPAM"})
+
+        self.assertEqual({"spam": "SPAM"}, cm_copy.maps[0])
+        self.assertEqual({"brian": "wanda"}, cm_copy.maps[1])
+        self.assertNotEquals(id(cm), id(cm_copy))
 
 class TestMapsAttribute(unittest.TestCase):
     def test_slice(self):

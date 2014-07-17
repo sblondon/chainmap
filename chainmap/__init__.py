@@ -5,6 +5,11 @@ class ChainMap(dict):
         else:
             self.maps = [{}]
 
+    def new_child(self, m=None):
+        _start_dict = {} if m is None else m
+        return ChainMap(_start_dict, *self.maps)
+
+
     def __getitem__(self, key):
         for mapping in self.maps:
             try:
@@ -45,5 +50,6 @@ class ChainMap(dict):
 
     def __nonzero__(self):
         return any(self.maps)
+
 
 
