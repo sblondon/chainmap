@@ -14,11 +14,8 @@ class TestInit(unittest.TestCase):
 
         self.assertEqual(1, cm["a"])
         self.assertEqual(3, cm["b"])
-        try:
+        with self.assertRaises(KeyError):
             cm["d"]
-            self.fail("'d' key does not exist.")
-        except KeyError:
-            pass
 
 
 class TestMapsAttribute(unittest.TestCase):
@@ -28,11 +25,9 @@ class TestMapsAttribute(unittest.TestCase):
         self.assertEqual({'a': 1}, cm.maps[0])
         self.assertEqual({'a': 2, 'b': 3}, cm.maps[1])
         self.assertEqual({'a': 2, 'b': 3}, cm.maps[-1])
-        try:
+
+        with self.assertRaises(IndexError):
             cm.maps[2]
-            self.fail("Index invalid")
-        except IndexError:
-            pass
 
     def test_index_0_always_exists(self):
         cm = chainmap.ChainMap()
@@ -47,7 +42,7 @@ class TestNewChild(unittest.TestCase):
         cm_copy = cm.new_child()
 
         self.assertEqual(({}, {"brian": "wanda"}), cm_copy.maps)
-        self.assertNotEquals(id(cm), id(cm_copy))
+        self.assertNotEqual(id(cm), id(cm_copy))
 
     def test_with_param(self):
         cm = chainmap.ChainMap({'brian': "wanda"})
@@ -55,7 +50,7 @@ class TestNewChild(unittest.TestCase):
         cm_copy = cm.new_child({"spam": "SPAM"})
 
         self.assertEqual(({"spam": "SPAM"}, {"brian": "wanda"}), cm_copy.maps)
-        self.assertNotEquals(id(cm), id(cm_copy))
+        self.assertNotEqual(id(cm), id(cm_copy))
 
 
 class TestParents(unittest.TestCase):
@@ -65,7 +60,7 @@ class TestParents(unittest.TestCase):
         cm_parent = cm.parents
 
         self.assertEqual([{}], cm_parent.maps)
-        self.assertNotEquals(id(cm), id(cm_parent))
+        self.assertNotEqual(id(cm), id(cm_parent))
 
     def test_with_param(self):
         cm = chainmap.ChainMap({'brian': "wanda"}, {"spam": "SPAM"}, {'holy': "graal"})
@@ -73,7 +68,7 @@ class TestParents(unittest.TestCase):
         cm_parent = cm.parents
 
         self.assertEqual(({"spam": "SPAM"}, {'holy': "graal"}), cm_parent.maps)
-        self.assertNotEquals(id(cm), id(cm_parent))
+        self.assertNotEqual(id(cm), id(cm_parent))
 
 
 class TestSetItem(unittest.TestCase):
@@ -109,28 +104,27 @@ class TestDeleteItem(unittest.TestCase):
         del cm["a"]
 
         self.assertEqual(2, cm["a"])
-        self.assertTrue("a" in cm)
+        self.assertIn("a", cm)
 
     def test_does_not_exist(self):
         cm = chainmap.ChainMap()
-        try:
+
+        with self.assertRaises(KeyError):
             del cm["a"]
-            self.fail("Deleting an non-existant attribute is not possible.")
-        except KeyError:
-            pass
 
 
 class TestInOperator(unittest.TestCase):
     def test_success(self):
         cm = chainmap.ChainMap({"a": 1}, {"a": 2, "b": 3})
 
-        self.assertTrue("a" in cm)
-        self.assertTrue("b" in cm)
+        self.assertIn("a", cm)
+        self.assertIn("b", cm)
 
     def test_failure(self):
         cm = chainmap.ChainMap()
 
-        self.assertFalse("a" in cm)
+        self.assertNotIn("a", cm)
+
 
 class TestCastToList(unittest.TestCase):
     def test_success(self):
@@ -138,20 +132,20 @@ class TestCastToList(unittest.TestCase):
 
         l = list(cm)
 
-        self.assertEquals(set(["a", "b", "c"]), set(l)) #ordre important?
-        self.assertTrue("b" in cm)
+        self.assertEqual(set(["a", "b", "c"]), set(l)) #ordre important?
+        self.assertIn("b", cm)
 
 
 class TestLength(unittest.TestCase):
     def test_empty(self):
         cm = chainmap.ChainMap()
 
-        self.assertEquals(0, len(cm))
+        self.assertEqual(0, len(cm))
 
     def test_filled(self):
         cm = chainmap.ChainMap({"a": 1}, {"a": 2, "b": 3})
 
-        self.assertEquals(2, len(cm))
+        self.assertEqual(2, len(cm))
 
 
 class TestCastToBool(unittest.TestCase):
@@ -165,16 +159,13 @@ class TestCastToBool(unittest.TestCase):
 
         self.assertTrue(bool(cm))
 
+
 class TestItems(unittest.TestCase):
     def test(self):
         cm = chainmap.ChainMap({'d': 567, 'a': 'e'}, {'d': 34}, {'f': 45})
 
         for k, v in cm.items():
-            self.assertTrue(
-                    (k == "d" and v == 567) or \
-                    (k == "a" and v == 'e') or \
-                    (k == "f" and v == 45)
-                    )
+            self.assertIn((k, v), (("d", 567), ("a", 'e'), ("f", 45)))
             self.assertFalse((k == "d" and v == 34))
 
 
