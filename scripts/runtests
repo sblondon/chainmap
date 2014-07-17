@@ -1,4 +1,0 @@
-#! /bin/sh
-
-./local.virtualenv/bin/nosetests #-x
-
